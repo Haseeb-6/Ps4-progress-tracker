@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0070d7">
+    <title>PS4 Game Tracker</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1><i class="fas fa-gamepad"></i> PS4 Game Tracker</h1>
+                <div class="header-actions">
+                    <button class="btn-add" id="addGameBtn">
+                        <i class="fas fa-plus"></i> Add Game
+                    </button>
+                    <button class="btn-sync" id="syncBtn" title="Sync Data">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="online-status" id="onlineStatus">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Dashboard -->
+        <div class="dashboard">
+            <div class="stat-card playing">
+                <h3>Playing</h3>
+                <span class="count" id="playingCount">0</span>
+            </div>
+            <div class="stat-card completed">
+                <h3>Completed</h3>
+                <span class="count" id="completedCount">0</span>
+            </div>
+            <div class="stat-card backlog">
+                <h3>Backlog</h3>
+                <span class="count" id="backlogCount">0</span>
+            </div>
+            <div class="stat-card dropped">
+                <h3>Dropped</h3>
+                <span class="count" id="droppedCount">0</span>
+            </div>
+        </div>
+
+        <!-- Game List -->
+        <div class="game-list-container">
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">All Games</button>
+                <button class="filter-btn" data-filter="playing">Playing</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="backlog">Backlog</button>
+                <button class="filter-btn" data-filter="dropped">Dropped</button>
+            </div>
+
+            <div class="game-list" id="gameList">
+                <!-- Games will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Add Game Modal -->
+        <div class="modal" id="addGameModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add PS4 Game</h2>
+                    <button class="close-btn" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="gameTitle">Game Title</label>
+                        <input type="text" id="gameTitle" placeholder="e.g., God of War" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameStatus">Status</label>
+                        <select id="gameStatus">
+                            <option value="playing">Playing</option>
+                            <option value="completed">Completed</option>
+                            <option value="backlog">Backlog</option>
+                            <option value="dropped">Dropped</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameProgress">Progress (%)</label>
+                        <input type="range" id="gameProgress" min="0" max="100" value="0">
+                        <span id="progressValue">0%</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameNotes">Notes</label>
+                        <textarea id="gameNotes" rows="3" placeholder="Add any notes..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameHours">Hours Played</label>
+                        <input type="number" id="gameHours" min="0" step="0.5" placeholder="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" id="cancelBtn">Cancel</button>
+                    <button class="btn-save" id="saveGameBtn">Save Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>PS4 Game Tracker v1.0 • <span id="lastSync">Never synced</span></p>
+            <p class="offline-notice" id="offlineNotice">🔴 Offline Mode - Changes saved locally</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        // Detect if app is installed
+        window.addEventListener('appinstalled', () => {
+            console.log('App installed successfully!');
+            alert('🎮 PS4 Game Tracker installed!');
+        });
+    </script>
+</body>
+</html>
